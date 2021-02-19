@@ -18,7 +18,7 @@
   	<div style="text-align: right"><a href="logout.php">ログアウト</a></div>
     <form action="" method="post">
       <dl>
-        <dt>ooさん、メッセージをどうぞ</dt>
+        <dt>○○さん、メッセージをどうぞ</dt>
         <dd>
           <textarea name="message" cols="50" rows="5"></textarea>
           <input type="hidden" name="reply_post_id" value="" />
