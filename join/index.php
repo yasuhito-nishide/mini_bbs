@@ -1,8 +1,7 @@
 <?php
 session_start();
 
-
-
+// $_POSTに値が入っていなければnoneを入っていればokをそれぞれ渡す
 	if (empty($_POST['name'])) {
 		$error['name'] = 'none';
 	} elseif (isset($_POST['name'])) {
@@ -24,28 +23,21 @@ session_start();
 	}
 
 	
-	
+	// neme.email.passwordが入っていれば処理する
 if(!empty($_POST["name"])&&($_POST["email"])&&($_POST["password"])){
+	// fileのアップロード　同じファイル名を防ぐために日付を入れている
+	$image = date('YmdHis') . $_FILES['image']['name'];
+	// $_SESSIONに$_POSTの内容を入れている、check.phpに渡すため
+	$_SESSION['join'] = $_POST;
+	// name.email.passwordが入っていればcheck.phpに飛ぶ
 	header("Location: check.php");
 	exit(); 
 }
-// もし$_POSTに文字があるならフォームに返すための記述
-if(isset($_POST['name'])){
-	$name = $_POST['name'];
-}else{
-	$name = "";
-}
-if(isset($_POST['email'])){
-	$email = $_POST['email'];
-}else{
-	$email = "";
-}
-if(isset($_POST['password'])){
-	$password = $_POST['password'];
-}else{
-	$password = "";
-}
 
+// check.phpから返されてきた$_REQUEST['action']の$_SESSIONの値を$_POSTに入れてvalueに入れている
+if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
+	$_POST = $_SESSION['join'];
+}
 ?>
 
 
@@ -73,7 +65,7 @@ if(isset($_POST['password'])){
 				<dl>
 					<dt>ニックネーム<span class="required">必須</span></dt>
 					<dd>
-						<input type="text" name="name" size="35" maxlength="255" value="<?php echo(htmlspecialchars($name,ENT_QUOTES)); ?>" />
+						<input type="text" name="name" size="35" maxlength="255" value="<?php echo(htmlspecialchars($_POST['name'],ENT_QUOTES)); ?>" />
 						<?php if ($error['name'] === 'none') : ?>
 							<p class="error">ニックネームを入力してください。</p>
 						<?php endif; ?>
@@ -83,7 +75,7 @@ if(isset($_POST['password'])){
 					</dd>
 					<dt>メールアドレス<span class="required">必須</span></dt>
 					<dd>
-						<input type="text" name="email" size="35" maxlength="255" value="<?php echo(htmlspecialchars($email,ENT_QUOTES)); ?>" />
+						<input type="text" name="email" size="35" maxlength="255" value="<?php echo(htmlspecialchars($_POST['email'],ENT_QUOTES)); ?>" />
 						<?php if ($error['email'] === 'none') : ?>
 							<p class="error">メールアドレスを入力してください。</p>
 						<?php elseif ($error['email'] === 'ok') : ?>
@@ -92,7 +84,7 @@ if(isset($_POST['password'])){
 					</dd>
 					<dt>パスワード<span class="required">必須</span></dt>
 					<dd>
-						<input type="password" name="password" size="10" maxlength="20" value="<?php echo(htmlspecialchars($password,ENT_QUOTES)); ?>" />
+						<input type="password" name="password" size="10" maxlength="20" value="<?php echo(htmlspecialchars($_POST['password'],ENT_QUOTES)); ?>" />
 						<?php if ($error['password'] === 'length') : ?>
 							<p class="error">パスワードは8文字以上で入力してください。</p>
 						<?php endif; ?>
