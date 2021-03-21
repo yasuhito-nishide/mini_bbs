@@ -1,43 +1,45 @@
 <?php
+error_reporting(0);
 session_start();
 
 // $_POSTに値が入っていなければnoneを入っていればokをそれぞれ渡す
-	if (empty($_POST['name'])) {
-		$error['name'] = 'none';
-	} elseif (isset($_POST['name'])) {
-		$error['name'] = 'ok';
-	}
-	if (empty($_POST['email'])) {
-		$error['email'] = 'none';
-	} elseif (isset($_POST['email'])) {
-		$error['email'] = 'ok';
-	}
+if (empty($_POST['name'])) {
+	$error['name'] = 'none';
+} elseif (isset($_POST['name'])) {
+	$error['name'] = 'ok';
+}
+if (empty($_POST['email'])) {
+	$error['email'] = 'none';
+} elseif (isset($_POST['email'])) {
+	$error['email'] = 'ok';
+}
 
-	if (strlen($_POST['password']) < 8) {
-		$error['password'] = 'length';
-	}
-	if (empty($_POST['password'])) {
-		$error['password'] = 'none';
-	} elseif (isset($_POST['password'])) {
-		$error['password'] = 'ok';
-	}
+if (strlen($_POST['password']) < 8) {
+	$error['password'] = 'length';
+}
+if (empty($_POST['password'])) {
+	$error['password'] = 'none';
+} elseif (isset($_POST['password'])) {
+	$error['password'] = 'ok';
+}
 
-	
-	// neme.email.passwordが入っていれば処理する
-if(!empty($_POST["name"])&&($_POST["email"])&&($_POST["password"])){
+
+// name.email.passwordが入っていれば処理する
+if (!empty($_POST["name"]) && ($_POST["email"]) && ($_POST["password"])) {
 	// fileのアップロード　同じファイル名を防ぐために日付を入れている
 	$image = date('YmdHis') . $_FILES['image']['name'];
 	// $_SESSIONに$_POSTの内容を入れている、check.phpに渡すため
 	$_SESSION['join'] = $_POST;
 	// name.email.passwordが入っていればcheck.phpに飛ぶ
 	header("Location: check.php");
-	exit(); 
+	exit();
 }
 
 // check.phpから返されてきた$_REQUEST['action']の$_SESSIONの値を$_POSTに入れてvalueに入れている
 if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 	$_POST = $_SESSION['join'];
 }
+
 ?>
 
 
@@ -61,11 +63,11 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 
 		<div id="content">
 			<p>次のフォームに必要事項をご記入ください。</p>
-			<form action="" method="post" enctype="multipart/form-data">
+			<form id="form" action="" method="post" enctype="multipart/form-data">
 				<dl>
 					<dt>ニックネーム<span class="required">必須</span></dt>
 					<dd>
-						<input type="text" name="name" size="35" maxlength="255" value="<?php echo(htmlspecialchars($_POST['name'],ENT_QUOTES)); ?>" />
+						<input type="text" name="name" size="35" maxlength="255" value="<?php echo (htmlspecialchars($_POST['name'], ENT_QUOTES)); ?>" />
 						<?php if ($error['name'] === 'none') : ?>
 							<p class="error">ニックネームを入力してください。</p>
 						<?php endif; ?>
@@ -75,7 +77,7 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 					</dd>
 					<dt>メールアドレス<span class="required">必須</span></dt>
 					<dd>
-						<input type="text" name="email" size="35" maxlength="255" value="<?php echo(htmlspecialchars($_POST['email'],ENT_QUOTES)); ?>" />
+						<input type="email" name="email" size="35" maxlength="255" value="<?php echo (htmlspecialchars($_POST['email'], ENT_QUOTES)); ?>" />
 						<?php if ($error['email'] === 'none') : ?>
 							<p class="error">メールアドレスを入力してください。</p>
 						<?php elseif ($error['email'] === 'ok') : ?>
@@ -84,10 +86,10 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 					</dd>
 					<dt>パスワード<span class="required">必須</span></dt>
 					<dd>
-						<input type="password" name="password" size="10" maxlength="20" value="<?php echo(htmlspecialchars($_POST['password'],ENT_QUOTES)); ?>" />
-						<?php if ($error['password'] === 'length') : ?>
-							<p class="error">パスワードは8文字以上で入力してください。</p>
-						<?php endif; ?>
+						<input type="password" id="password" name="password" size="10" value="<?php echo (htmlspecialchars($_POST['password'], ENT_QUOTES)); ?>" />
+
+						<p id="error"></p>
+
 						<?php if ($error['password'] === 'none') : ?>
 							<p class="error">パスワードを入力してください。</p>
 						<?php elseif ($error['password'] === 'ok') : ?>
@@ -103,6 +105,19 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 				<div><input type="submit" value="入力内容を確認する" /></div>
 			</form>
 		</div>
+		<script>
+			let input1 = document.getElementById('password').value;
+			document.getElementById('form').onsubmit = function() {
+				if (input1.length < 8) {
+					document.getElementById('error').textContent = 'パスワードは8文字以上で入力してください';
+					return false;
+				} else {
+					true;
+				}
+			}
+			console.log(input1.length);
+		</script>
 </body>
+
 
 </html>
