@@ -22,12 +22,20 @@ if (empty($_POST['password'])) {
 } elseif (isset($_POST['password'])) {
 	$error['password'] = 'ok';
 }
-
+// 画像のエラーチェック
+$filename = $_FILES['image']['name'];
+if(!empty($filename)) {
+	$ext = substr($filename,-3);
+	if ($ext != 'jpg' && $ext != 'png' && $ext != 'gif') {
+		$error['image'] = 'type';
+	}
+}
 
 // name.email.passwordが入っていれば処理する
 if (!empty($_POST["name"]) && ($_POST["email"]) && ($_POST["password"])) {
 	// fileのアップロード同じファイル名を防ぐために日付を入れている
 	$image = date('YmdHis') . $_FILES['image']['name'];
+	// 画像のアップデート
 	move_uploaded_file($_FILES['image']['tmp_name'],'../member_picture/'.$image);
 	// $_SESSIONに$_POSTの内容を入れている、check.phpに渡すため
 	$_SESSION['join'] = $_POST;
@@ -102,12 +110,15 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 					<dt>写真など</dt>
 					<dd>
 						<input type="file" name="image" size="35" value="test" />
+						<?php if ($error['image'] === 'type') :  ?>
+							<p class="nothing">「jpg」か「png」か「gif」でアップロードしてください。</p>
+						<?php endif; ?>
 					</dd>
 				</dl>
 				<div><input type="submit" value="入力内容を確認する" /></div>
 			</form>
 		</div>
-		<script>
+		<!-- <script>
 			let input1 = document.getElementById('password').value;
 			document.getElementById('form').onsubmit = function() {
 				if (input1.length < 8) {
@@ -118,7 +129,7 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 				}
 			}
 			console.log(input1.length);
-		</script>
+		</script> -->
 </body>
 
 
