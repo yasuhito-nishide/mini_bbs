@@ -26,10 +26,12 @@ if (empty($_POST['password'])) {
 
 // name.email.passwordが入っていれば処理する
 if (!empty($_POST["name"]) && ($_POST["email"]) && ($_POST["password"])) {
-	// fileのアップロード　同じファイル名を防ぐために日付を入れている
+	// fileのアップロード同じファイル名を防ぐために日付を入れている
 	$image = date('YmdHis') . $_FILES['image']['name'];
+	move_uploaded_file($_FILES['image']['tmp_name'],'../member_picture/'.$image);
 	// $_SESSIONに$_POSTの内容を入れている、check.phpに渡すため
 	$_SESSION['join'] = $_POST;
+	$_SESSION['join']['image'] = $image;
 	// name.email.passwordが入っていればcheck.phpに飛ぶ
 	header("Location: check.php");
 	exit();
@@ -67,7 +69,7 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 				<dl>
 					<dt>ニックネーム<span class="required">必須</span></dt>
 					<dd>
-						<input type="text" name="name" size="35" maxlength="255" value="<?php echo (htmlspecialchars($_POST['name'], ENT_QUOTES)); ?>" />
+						<input type="text" name="name" size="35" maxlength="255" value="<?php echo (htmlspecialchars($_SESSION['join']['name'], ENT_QUOTES)); ?>" />
 						<?php if ($error['name'] === 'none') : ?>
 							<p class="error">ニックネームを入力してください。</p>
 						<?php endif; ?>
@@ -77,7 +79,7 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 					</dd>
 					<dt>メールアドレス<span class="required">必須</span></dt>
 					<dd>
-						<input type="email" name="email" size="35" maxlength="255" value="<?php echo (htmlspecialchars($_POST['email'], ENT_QUOTES)); ?>" />
+						<input type="email" name="email" size="35" maxlength="255" value="<?php echo (htmlspecialchars($_SESSION['join']['email'], ENT_QUOTES)); ?>" />
 						<?php if ($error['email'] === 'none') : ?>
 							<p class="error">メールアドレスを入力してください。</p>
 						<?php elseif ($error['email'] === 'ok') : ?>
@@ -86,7 +88,7 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 					</dd>
 					<dt>パスワード<span class="required">必須</span></dt>
 					<dd>
-						<input type="password" id="password" name="password" size="10" value="<?php echo (htmlspecialchars($_POST['password'], ENT_QUOTES)); ?>" />
+						<input type="password" id="password" name="password" size="10" minlength="8" value="<?php echo (htmlspecialchars($_SESSION['join']['password'], ENT_QUOTES)); ?>" />
 
 						<p id="error"></p>
 
@@ -112,7 +114,7 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 					document.getElementById('error').textContent = 'パスワードは8文字以上で入力してください';
 					return false;
 				} else {
-					true;
+					return true;
 				}
 			}
 			console.log(input1.length);
