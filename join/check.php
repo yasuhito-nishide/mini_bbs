@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+// $_SESSIONに何も入ってなかったらindex.phpに戻る
 if (!isset($_SESSION['join'])) {
 	header('Location: index.php');
 	exit();

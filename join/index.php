@@ -35,11 +35,12 @@ if (empty($error)) {
 	header("Location: check.php");
 	exit();
 }
+}
 
 // check.phpから返されてきた$_REQUEST['action']の$_SESSIONの値を$_POSTに入れてvalueに入れている
+// URLパラメーターが付いていれば  check.phpからaction?rewriteという値が帰ってきている
 if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 	$_POST = $_SESSION['join'];
-}
 }
 ?>
 
