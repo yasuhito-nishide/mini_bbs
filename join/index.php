@@ -5,23 +5,14 @@ session_start();
 // $_POSTに値が入っていなければnoneを入っていればokをそれぞれ渡す
 if (empty($_POST['name'])) {
 	$error['name'] = 'none';
-} elseif (isset($_POST['name'])) {
-	$error['name'] = 'ok';
 }
 if (empty($_POST['email'])) {
 	$error['email'] = 'none';
-} elseif (isset($_POST['email'])) {
-	$error['email'] = 'ok';
-}
+} 
 
-if (strlen($_POST['password']) < 8) {
-	$error['password'] = 'length';
-}
 if (empty($_POST['password'])) {
 	$error['password'] = 'none';
-} elseif (isset($_POST['password'])) {
-	$error['password'] = 'ok';
-}
+} 
 // 画像のエラーチェック
 $filename = $_FILES['image']['name'];
 if(!empty($filename)) {
@@ -81,29 +72,19 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 						<?php if ($error['name'] === 'none') : ?>
 							<p class="error">ニックネームを入力してください。</p>
 						<?php endif; ?>
-						<?php if ($error['name'] === 'ok') : ?>
-							<p class="nothing">空いている項目を入力してください</p>
-						<?php endif; ?>
 					</dd>
 					<dt>メールアドレス<span class="required">必須</span></dt>
 					<dd>
 						<input type="email" name="email" size="35" maxlength="255" value="<?php echo (htmlspecialchars($_SESSION['join']['email'], ENT_QUOTES)); ?>" />
 						<?php if ($error['email'] === 'none') : ?>
 							<p class="error">メールアドレスを入力してください。</p>
-						<?php elseif ($error['email'] === 'ok') : ?>
-							<p class="nothing">空いている項目の入力してください</p>
 						<?php endif; ?>
 					</dd>
 					<dt>パスワード<span class="required">必須</span></dt>
 					<dd>
 						<input type="password" id="password" name="password" size="10" minlength="8" value="<?php echo (htmlspecialchars($_SESSION['join']['password'], ENT_QUOTES)); ?>" />
-
-						<p id="error"></p>
-
 						<?php if ($error['password'] === 'none') : ?>
 							<p class="error">パスワードを入力してください。</p>
-						<?php elseif ($error['password'] === 'ok') : ?>
-							<p class="nothing">空いている項目を入力してください</p>
 						<?php endif; ?>
 					</dd>
 
