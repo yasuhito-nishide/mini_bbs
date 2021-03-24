@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
 session_start();
-
+if (!empty($_POST)) {
 // $_POSTに値が入っていなければnoneを入っていればokをそれぞれ渡す
 if (empty($_POST['name'])) {
 	$error['name'] = 'none';
@@ -23,7 +23,7 @@ if(!empty($filename)) {
 }
 
 // name.email.passwordが入っていれば処理する
-if (!empty($_POST["name"]) && ($_POST["email"]) && ($_POST["password"])) {
+if (empty($error)) {
 	// fileのアップロード同じファイル名を防ぐために日付を入れている
 	$image = date('YmdHis') . $_FILES['image']['name'];
 	// 画像のアップデート
@@ -40,7 +40,7 @@ if (!empty($_POST["name"]) && ($_POST["email"]) && ($_POST["password"])) {
 if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 	$_POST = $_SESSION['join'];
 }
-
+}
 ?>
 
 
@@ -99,18 +99,7 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 				<div><input type="submit" value="入力内容を確認する" /></div>
 			</form>
 		</div>
-		<!-- <script>
-			let input1 = document.getElementById('password').value;
-			document.getElementById('form').onsubmit = function() {
-				if (input1.length < 8) {
-					document.getElementById('error').textContent = 'パスワードは8文字以上で入力してください';
-					return false;
-				} else {
-					return true;
-				}
-			}
-			console.log(input1.length);
-		</script> -->
+		
 </body>
 
 
