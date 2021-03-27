@@ -8,6 +8,7 @@ if (!isset($_SESSION['join'])) {
 	exit();
 }
 if (!empty($_POST)) {
+	// ＄dbにはすでにdbconnect.phpでdb接続の記入がしてあるので$dbでprepareして$statementに入れる
 $statement = $db -> prepare('INSERT INTO members SET name=?, email=?,password=?,picture=?, created=NOW()');
 $statement -> execute(array(
 	$_SESSION['join']['name'],
@@ -17,6 +18,8 @@ $statement -> execute(array(
 ));
 // unsetで不要になったデータ['join']を破棄する
 unset($_SESSION['join']);
+header('Location: thanks.php');
+exit();
 }
 ?>
 <!DOCTYPE html>
