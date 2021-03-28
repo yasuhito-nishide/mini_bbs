@@ -29,7 +29,7 @@ if(empty($error)) {
 	$member->execute(array($_POST['email']));
 	$record = $member->fetch();
 	if ($record['cnt'] > 0) {
-		$error['email'] = 'duplicate';
+		$error['email'] = 'duplication';
 	}
 }
 
@@ -112,7 +112,7 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 						<?php if ($error['image'] === 'type') :  ?>
 							<p class="nothing">「jpg」か「png」か「gif」でアップロードしてください。</p>
 							<?php endif; ?>
-						<?php if(!empty($error)):  ?>
+						<?php if(!empty($error)): ?>
 						<p class="error">恐れ入りますが、画像を改めて指定して下さい。</p>
 							<?php endif; ?>
 					</dd>
