@@ -1,6 +1,6 @@
 <?php
 session_start();
-error_reporting(0);
+// error_reporting(0);
 require('dbconnect.php');
 
 if ($_COOKIE['email'] !== '') {
@@ -23,7 +23,7 @@ if (!empty($_POST)) {
       $_SESSION['time'] = time();
 
       if ($_POST['save'] === 'on') {
-        setcookie('email', $_POST['email'],time()+60*60*24*14);
+        setcookie('email', $_POST['email'], time() + 60 * 60 * 24 * 14);
       }
 
       header('Location: index.php');
@@ -61,7 +61,7 @@ if (!empty($_POST)) {
         <dl>
           <dt>メールアドレス</dt>
           <dd>
-            <input type="text" name="email" size="35" maxlength="255" value="<?php echo htmlspecialchars($email, ENT_QUOTES); ?>" />
+            <input type="text" name="email" size="35" maxlength="255" value="<?php print(htmlspecialchars($email, ENT_QUOTES)); ?>" />
             <?php if ($error['login'] === 'blank') : ?>
               <p class="error">メールアドレスとパスワードをご記入ください。</p>
             <?php endif; ?>
@@ -71,7 +71,7 @@ if (!empty($_POST)) {
           </dd>
           <dt>パスワード</dt>
           <dd>
-            <input type="password" name="password" size="35" maxlength="255" value="<?php echo htmlspecialchars($_POST['password'], ENT_QUOTES); ?>" />
+            <input type="password" name="password" size="35" maxlength="255" value="<?php print(htmlspecialchars($_POST['password'], ENT_QUOTES)); ?>" />
           </dd>
           <dt>ログイン情報の記録</dt>
           <dd>
