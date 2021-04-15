@@ -1,6 +1,6 @@
 <?php
 session_start();
-// error_reporting(0);
+error_reporting(0);
 require('dbconnect.php');
 
 if ($_COOKIE['email'] !== '') {
@@ -26,7 +26,7 @@ if (!empty($_POST)) {
         setcookie('email', $_POST['email'], time() + 60 * 60 * 24 * 14);
       }
 
-      header('Location: index.php');
+      header('Location: index1.php');
       exit();
     } else {
       $error['login'] = 'failed';
@@ -57,7 +57,7 @@ if (!empty($_POST)) {
         <p>入会手続きがまだの方はこちらからどうぞ。</p>
         <p>&raquo;<a href="join/index.php">入会手続きをする</a></p>
       </div>
-      <form action="index1.php" method="post">
+      <form action="" method="post">
         <dl>
           <dt>メールアドレス</dt>
           <dd>

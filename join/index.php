@@ -4,51 +4,51 @@ session_start();
 require('../dbconnect.php');
 
 if (!empty($_POST)) {
-// $_POSTに値が入っていなければnoneを入っていればokをそれぞれ渡す
-if (empty($_POST['name'])) {
-	$error['name'] = 'none';
-}
-if (empty($_POST['email'])) {
-	$error['email'] = 'none';
-} 
-if (empty($_POST['password'])) {
-	$error['password'] = 'none';
-} 
-// 画像のエラーチェック
-$filename = $_FILES['image']['name'];
-if(!empty($filename)) {
-	$ext = substr($filename,-3);
-	if ($ext != 'jpg' && $ext != 'png' && $ext != 'gif') {
-		$error['image'] = 'type';
+	// $_POSTに値が入っていなければnoneを入っていればokをそれぞれ渡す
+	if (empty($_POST['name'])) {
+		$error['name'] = 'none';
 	}
-}
-
-// データベースにメールアドレスの重複があれば
-if(empty($error)) {
-	$member = $db->prepare('SELECT COUNT(*) AS cnt FROM members WHERE email=? ');
-	$member->execute(array($_POST['email']));
-	$record = $member->fetch();
-	if ($record['cnt'] > 0) {
-		$error['email'] = 'duplication';
+	if (empty($_POST['email'])) {
+		$error['email'] = 'none';
 	}
-}
+	if (empty($_POST['password'])) {
+		$error['password'] = 'none';
+	}
+	// 画像のエラーチェック
+	$filename = $_FILES['image']['name'];
+	if (!empty($filename)) {
+		$ext = substr($filename, -3);
+		if ($ext != 'jpg' && $ext != 'png' && $ext != 'gif') {
+			$error['image'] = 'type';
+		}
+	}
 
-// name.email.passwordが入っていれば処理する
-if (empty($error)) {
-	// fileのアップロード同じファイル名を防ぐために日付を入れている
-	// date('YmdHis)で日付を取得　　202103261123myFace.pngなどの名前になる。
-	$image = date('YmdHis') . $_FILES['image']['name'];
-	// 画像のアップロード　['image']['tmp_name']に一時的に保管している
-	// move_uploaded_fileで送る　第一引数が今ある場所　　　第二引数が保存先
-	move_uploaded_file($_FILES['image']['tmp_name'],'../member_picture/'.$image);
-	// $_SESSIONに$_POSTの内容を入れている、check.phpに渡すため
-	$_SESSION['join'] = $_POST;
-	// $imageを$_SESSION['join']['image']に保存
-	$_SESSION['join']['image'] = $image;
-	// name.email.passwordが入っていればcheck.phpに飛ぶ
-	header("Location: check.php");
-	exit();
-}
+	// データベースにメールアドレスの重複があれば
+	if (empty($error)) {
+		$member = $db->prepare('SELECT COUNT(*) AS cnt FROM members WHERE email=? ');
+		$member->execute(array($_POST['email']));
+		$record = $member->fetch();
+		if ($record['cnt'] > 0) {
+			$error['email'] = 'duplication';
+		}
+	}
+
+	// name.email.passwordが入っていれば処理する
+	if (empty($error)) {
+		// fileのアップロード同じファイル名を防ぐために日付を入れている
+		// date('YmdHis)で日付を取得　　202103261123myFace.pngなどの名前になる。
+		$image = date('YmdHis') . $_FILES['image']['name'];
+		// 画像のアップロード　['image']['tmp_name']に一時的に保管している
+		// move_uploaded_fileで送る　第一引数が今ある場所　　　第二引数が保存先
+		move_uploaded_file($_FILES['image']['tmp_name'], '../member_picture/' . $image);
+		// $_SESSIONに$_POSTの内容を入れている、check.phpに渡すため
+		$_SESSION['join'] = $_POST;
+		// $imageを$_SESSION['join']['image']に保存
+		$_SESSION['join']['image'] = $image;
+		// name.email.passwordが入っていればcheck.phpに飛ぶ
+		header("Location: check.php");
+		exit();
+	}
 }
 
 // check.phpから返されてきた$_REQUEST['action']の$_SESSIONの値を$_POSTに入れてvalueに入れている
@@ -111,16 +111,16 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 						<input type="file" name="image" size="35" value="test" />
 						<?php if ($error['image'] === 'type') :  ?>
 							<p class="nothing">「jpg」か「png」か「gif」でアップロードしてください。</p>
-							<?php endif; ?>
-						<?php if(!empty($error)): ?>
-						<p class="error">恐れ入りますが、画像を改めて指定して下さい。</p>
-							<?php endif; ?>
+						<?php endif; ?>
+						<?php if (!empty($error)) : ?>
+							<p class="error">恐れ入りますが、画像を改めて指定して下さい。</p>
+						<?php endif; ?>
 					</dd>
 				</dl>
 				<div><input type="submit" value="入力内容を確認する" /></div>
 			</form>
 		</div>
-		
+
 </body>
 
 
