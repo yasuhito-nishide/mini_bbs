@@ -68,7 +68,6 @@ exit();
 				<div><a href="index.php?action=rewrite">&laquo;&nbsp;書き直す</a> | <input type="submit" value="登録する" /></div>
 			</form>
 		</div>
-
 	</div>
 </body>
 
